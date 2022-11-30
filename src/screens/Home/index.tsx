@@ -27,8 +27,8 @@ export function Home() {
     const [cars, setCars] = useState<CarDTO[]>([])
     const [loading, setLoading] = useState(true)
 
-    function handleCarDetials() {
-        navigate('CarDetails')
+    function handleCarDetials(car: CarDTO) {
+        navigate('CarDetails', {car})
     }
 
 
@@ -60,7 +60,7 @@ export function Home() {
             {!loading
                 ? <CarList
                     data={cars}
-                    renderItem={({ item }) => <Car data={item} onPress={handleCarDetials} />}
+                    renderItem={({ item }) => <Car data={item} onPress={() => handleCarDetials(item)} />}
                     keyExtractor={item => item.id}
                     ItemSeparatorComponent={() => <Separator />}
                 />

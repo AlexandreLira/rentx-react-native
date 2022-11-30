@@ -17,6 +17,7 @@ import {
     Rent,
     Type
 } from "./styles";
+import { getAccessoryIcon } from "../../utils/getAccessoryIcon";
 
 
 interface CarProps extends RectButtonProps{
@@ -29,8 +30,11 @@ export function Car({ data, ...rest }: CarProps) {
         brand,
         name,
         rent,
-        thumbnail
+        thumbnail,
+        fuel_type
     } = data
+
+    const MotorIcon = getAccessoryIcon(fuel_type)
 
     return (        
         <Container {...rest}>
@@ -45,7 +49,7 @@ export function Car({ data, ...rest }: CarProps) {
                     </Rent>
 
                     <Type>
-                        <GasolineSvg width={16}/>
+                        <MotorIcon width={16}/>
                     </Type>
                 </About>
             </Details>
