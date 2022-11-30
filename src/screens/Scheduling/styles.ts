@@ -13,7 +13,7 @@ export const Container = styled.View`
 
 export const Header = styled.View`
     width: 100%;
-    height: 325px;
+    height: 40%;
 
     background-color: ${({ theme }) => theme.colors.header};
 
@@ -58,8 +58,10 @@ export const DateValue = styled.Text<DateValueProps>`
     color: ${({ theme }) => theme.colors.background_secondary};
     font-family: ${({ theme }) => theme.fonts.primary_500};
     font-size: ${RFValue(15)}px;
-
+    
     ${({value, theme}) => !Boolean(value) && css`
+    border-bottom
+        border-bottom-style: solid;
         border-bottom-width: 1px;
         border-bottom-color: ${theme.colors.text};
         padding-bottom: 5px;
