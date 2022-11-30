@@ -1,6 +1,9 @@
+import React from 'react';
 import { FlatList } from 'react-native';
-import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
+import { RFValue } from 'react-native-responsive-fontsize';
+
+import { CarDTO } from '../../dtos/CarDTOS';
 
 export const Container = styled.View`
     flex: 1;
@@ -30,8 +33,7 @@ export const CarList = styled(FlatList).attrs({
         padding: 16
     },
     showVerticalScrollIndicator: false
-})`
-`;
+})`` as React.ComponentType as new <CarDTO>() => FlatList<CarDTO>;
 
 export const Separator = styled.View`
     height: 16px;
