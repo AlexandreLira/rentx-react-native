@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Accessory } from '../../components/Accessory';
 import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
+import { Button } from '../../components/Button';
 
 import {
     Container,
@@ -18,7 +19,8 @@ import {
     Period,
     Price,
     About,
-    Accessories
+    Accessories,
+    Footer
 } from './styles';
 
 import gasolineSvg from '../../assets/gasoline.svg'
@@ -87,6 +89,7 @@ export function CarDetails() {
                 <Accessories>
                     {accessoriesItems.map(item => (
                         <Accessory
+                            key={item.name}
                             name={item.name}
                             icon={item.icon}
                         />
@@ -99,6 +102,10 @@ export function CarDetails() {
                     É um belíssimo carro para quem gosta de acelerar.
                 </About>
             </Content>
+
+            <Footer>
+                <Button title="Escolher período do aluguel"/>
+            </Footer>
         </Container>
     )
 }
