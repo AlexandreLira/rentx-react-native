@@ -1,13 +1,22 @@
 import React from 'react';
+
 import { StatusBar } from 'expo-status-bar';
 import { Feather } from '@expo/vector-icons'
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
+import { useNavigation } from '@react-navigation/native'
 
 import { Accessory } from '../../components/Accessory';
 import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
 import { Button } from '../../components/Button';
+
+import gasolineSvg from '../../assets/gasoline.svg'
+import accelerationSvg from '../../assets/acceleration.svg'
+import forceSvg from '../../assets/force.svg'
+import peopleSvg from '../../assets/people.svg'
+import speedSvg from '../../assets/speed.svg'
+import exchangeSvg from '../../assets/exchange.svg'
 
 import {
     Container,
@@ -34,13 +43,6 @@ import {
     RentalPriceQuota,
     RentalPriceTotal
 } from './styles';
-
-import gasolineSvg from '../../assets/gasoline.svg'
-import accelerationSvg from '../../assets/acceleration.svg'
-import forceSvg from '../../assets/force.svg'
-import peopleSvg from '../../assets/people.svg'
-import speedSvg from '../../assets/speed.svg'
-import exchangeSvg from '../../assets/exchange.svg'
 
 export function SchedulingDetails() {
 
@@ -72,6 +74,11 @@ export function SchedulingDetails() {
     ]
 
     const { colors } = useTheme()
+    const navigation = useNavigation<any>()
+
+    function handleConfirmRental() {
+        navigation.navigate('SchedulingComplete')
+    }
 
     return (
         <Container>
@@ -145,11 +152,12 @@ export function SchedulingDetails() {
                 </RentalPrice>
             </Content>
 
-
-
-
             <Footer>
-                <Button title="Alugar agora" color={colors.success}/>
+                <Button
+                    title="Alugar agora"
+                    color={colors.success}
+                    onPress={handleConfirmRental}
+                />
             </Footer>
         </Container>
     )

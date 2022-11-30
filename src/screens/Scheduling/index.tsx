@@ -1,5 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
+import { useNavigation } from '@react-navigation/native'
 
 import { useTheme } from 'styled-components';
 import { BackButton } from '../../components/BackButton';
@@ -22,12 +23,18 @@ import { Calendar } from '../../components/Calendar';
 
 export function Scheduling() {
     const {colors} = useTheme()
+    const navigation = useNavigation<any>()
+
+    
+    function handleConfirmRental(){
+        navigation.navigate('SchedulingDetails')
+    }
+
     return (
         <Container>
             <StatusBar style="light"/>
             <Header>
                 <BackButton
-                    onPress={() => console.log('dajkh')}
                     color={colors.background_secondary}
                 />
 
@@ -59,7 +66,7 @@ export function Scheduling() {
 
             </Content>
             <Footer>
-                <Button title="Confirmar"/>
+                <Button title="Confirmar" onPress={handleConfirmRental}/>
             </Footer>
         </Container>
     )
