@@ -1,3 +1,6 @@
+import 'react-native-gesture-handler';
+
+
 import React, { useCallback } from 'react';
 import { Home } from './src/screens/Home';
 import { useFonts } from 'expo-font';
