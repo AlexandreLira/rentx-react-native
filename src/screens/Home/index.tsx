@@ -14,6 +14,7 @@ import { Car } from '../../components/Car';
 import { CarDetails } from '../CarDetails';
 import { Scheduling } from '../Scheduling';
 import { SchedulingDetails } from '../SchedulingDetails';
+import { SchedulingComplete } from '../SchedulingComplete';
 
 export function Home() {
 
@@ -48,7 +49,7 @@ export function Home() {
               
 
         // </Container>
-        <SchedulingDetails/>
+        <SchedulingComplete/>
         
     )
 }
