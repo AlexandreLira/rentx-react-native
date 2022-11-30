@@ -60,7 +60,6 @@ export const DateValue = styled.Text<DateValueProps>`
     font-size: ${RFValue(15)}px;
     
     ${({value, theme}) => !Boolean(value) && css`
-    border-bottom
         border-bottom-style: solid;
         border-bottom-width: 1px;
         border-bottom-color: ${theme.colors.text};

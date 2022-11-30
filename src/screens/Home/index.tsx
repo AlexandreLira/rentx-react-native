@@ -13,6 +13,7 @@ import {
 import { Car } from '../../components/Car';
 import { CarDetails } from '../CarDetails';
 import { Scheduling } from '../Scheduling';
+import { SchedulingDetails } from '../SchedulingDetails';
 
 export function Home() {
 
@@ -47,7 +48,7 @@ export function Home() {
               
 
         // </Container>
-        <Scheduling/>
+        <SchedulingDetails/>
         
     )
 }
