@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Alert } from 'react-native'
 import { StatusBar } from 'expo-status-bar';
 import { Feather } from '@expo/vector-icons'
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -11,12 +11,9 @@ import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
 import { Button } from '../../components/Button';
 
-import gasolineSvg from '../../assets/gasoline.svg'
-import accelerationSvg from '../../assets/acceleration.svg'
-import forceSvg from '../../assets/force.svg'
-import peopleSvg from '../../assets/people.svg'
-import speedSvg from '../../assets/speed.svg'
-import exchangeSvg from '../../assets/exchange.svg'
+import { CarDTO } from '../../dtos/CarDTOS';
+import { api } from '../../services/api';
+import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
 
 import {
     Container,
@@ -43,14 +40,14 @@ import {
     RentalPriceQuota,
     RentalPriceTotal
 } from './styles';
-import { CarDTO } from '../../dtos/CarDTOS';
-import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
+
 
 interface Params {
     rentalPeriod: {
         startDateFormatted: string
         endDateFormatted: string
         numberOfDays: number,
+        dates: string[]
     },
     car: CarDTO
 }
@@ -58,20 +55,38 @@ interface Params {
 export function SchedulingDetails() {
 
 
+    const route = useRoute()
     const { colors } = useTheme()
     const navigation = useNavigation<any>()
-    const route = useRoute()
-    const { rentalPeriod, car } = route.params as Params
 
-    function handleConfirmRental() {
-        navigation.navigate('SchedulingComplete')
+    const { rentalPeriod, car } = route.params as Params
+    
+    async function handleConfirmRental() {
+        const response = await api.get(`/schedules_bycars/${car.id}`)
+        const { unavailable_dates } = response.data
+        
+        const unavailableDates = [
+            ...unavailable_dates,
+            ...rentalPeriod.dates
+        ]
+        console.log(rentalPeriod.dates)
+
+        api.put(`/schedules_bycars/${car.id}`, {
+            id: car.id,
+            unavailable_dates: unavailableDates
+        })
+            .then(response => navigation.navigate('SchedulingComplete'))
+            .catch(error => Alert.alert('Não foi possivel confirmar o agendamento.'))
+
+
+
     }
 
     return (
         <Container>
             <StatusBar style="dark" />
             <Header>
-                <BackButton/>
+                <BackButton />
             </Header>
 
             <CarImageContent>

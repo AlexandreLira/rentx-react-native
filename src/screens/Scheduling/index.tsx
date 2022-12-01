@@ -31,7 +31,8 @@ import { CarDTO } from '../../dtos/CarDTOS';
 interface rentalPeriodProps {
     startDateFormatted: string
     endDateFormatted: string
-    numberOfDays: number
+    numberOfDays: number,
+    dates: string[]
 }
 
 interface Params {
@@ -72,11 +73,11 @@ export function Scheduling() {
             : setLastSelectedDate(endDate)
 
         setMarkedDates(interval)
-
         setRentalPeriod({
             startDateFormatted: format(addDays(startDate.timestamp, 1), 'dd/MM/yyyy'),
             endDateFormatted: format(addDays(endDate.timestamp, 1), 'dd/MM/yyyy'),
-            numberOfDays: intervalSize
+            numberOfDays: intervalSize,
+            dates: Object.keys(interval)
         })
     }
 
