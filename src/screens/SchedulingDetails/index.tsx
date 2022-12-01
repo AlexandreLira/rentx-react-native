@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Feather } from '@expo/vector-icons'
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 import { Accessory } from '../../components/Accessory';
 import { BackButton } from '../../components/BackButton';
@@ -43,38 +43,25 @@ import {
     RentalPriceQuota,
     RentalPriceTotal
 } from './styles';
+import { CarDTO } from '../../dtos/CarDTOS';
+import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
+
+interface Params {
+    rentalPeriod: {
+        startDateFormatted: string
+        endDateFormatted: string
+        numberOfDays: number,
+    },
+    car: CarDTO
+}
 
 export function SchedulingDetails() {
 
-    const accessoriesItems = [
-        {
-            name: '380km/h',
-            icon: speedSvg
-        },
-        {
-            name: '3.2s',
-            icon: accelerationSvg
-        },
-        {
-            name: '800 HP',
-            icon: forceSvg
-        },
-        {
-            name: 'Gasolina',
-            icon: gasolineSvg
-        },
-        {
-            name: 'Auto',
-            icon: exchangeSvg
-        },
-        {
-            name: '2 pessoas',
-            icon: peopleSvg
-        },
-    ]
 
     const { colors } = useTheme()
     const navigation = useNavigation<any>()
+    const route = useRoute()
+    const { rentalPeriod, car } = route.params as Params
 
     function handleConfirmRental() {
         navigation.navigate('SchedulingComplete')
@@ -84,35 +71,33 @@ export function SchedulingDetails() {
         <Container>
             <StatusBar style="dark" />
             <Header>
-                <BackButton
-                    onPress={() => console.log('dajkh')}
-                />
+                <BackButton/>
             </Header>
 
             <CarImageContent>
-                <ImageSlider imagesUrl={['https://cdn.wheel-size.com/automobile/body/audi-rs5-2020-2022-1613028936.4473815.png']} />
+                <ImageSlider imagesUrl={car.photos} />
             </CarImageContent>
 
 
             <Content>
                 <Details>
                     <Description>
-                        <Brand>Lamborghini</Brand>
-                        <Name>Huracan</Name>
+                        <Brand>{car.brand}</Brand>
+                        <Name>{car.name}</Name>
                     </Description>
 
                     <Rent>
                         <Period>Ao dia</Period>
-                        <Price>R$ 580</Price>
+                        <Price>R$ {car.rent.price}</Price>
                     </Rent>
                 </Details>
 
                 <Accessories>
-                    {accessoriesItems.map(item => (
+                    {car.accessories.map(item => (
                         <Accessory
-                            key={item.name}
+                            key={item.type}
                             name={item.name}
-                            icon={item.icon}
+                            icon={getAccessoryIcon(item.type)}
                         />
                     ))}
                 </Accessories>
@@ -128,7 +113,7 @@ export function SchedulingDetails() {
 
                     <DateInfo>
                         <DateTitle>De</DateTitle>
-                        <DateValue>19/07/2029</DateValue>
+                        <DateValue>{rentalPeriod.startDateFormatted}</DateValue>
                     </DateInfo>
 
                     <Feather
@@ -139,15 +124,15 @@ export function SchedulingDetails() {
 
                     <DateInfo>
                         <DateTitle>Até</DateTitle>
-                        <DateValue>19/07/2029</DateValue>
+                        <DateValue>{rentalPeriod.endDateFormatted}</DateValue>
                     </DateInfo>
                 </RentalPeriod>
 
                 <RentalPrice>
                     <RentalPriceLabel>TOTAL</RentalPriceLabel>
                     <RentalPriceDetails>
-                        <RentalPriceQuota>R$ 580 x3 diárias</RentalPriceQuota>
-                        <RentalPriceTotal>R$ 2.900</RentalPriceTotal>
+                        <RentalPriceQuota>R$ {car.rent.price} x{rentalPeriod.numberOfDays} diárias</RentalPriceQuota>
+                        <RentalPriceTotal>R$ {(rentalPeriod.numberOfDays * car.rent.price).toFixed(2)}</RentalPriceTotal>
                     </RentalPriceDetails>
                 </RentalPrice>
             </Content>
