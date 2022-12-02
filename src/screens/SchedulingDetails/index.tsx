@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert } from 'react-native'
 import { StatusBar } from 'expo-status-bar';
 import { Feather } from '@expo/vector-icons'
@@ -53,32 +53,48 @@ interface Params {
 }
 
 export function SchedulingDetails() {
-
+    const [loading, setLoading] = useState(false)
 
     const route = useRoute()
     const { colors } = useTheme()
     const navigation = useNavigation<any>()
 
     const { rentalPeriod, car } = route.params as Params
-    
+
     async function handleConfirmRental() {
+        setLoading(true)
+
         const response = await api.get(`/schedules_bycars/${car.id}`)
         const { unavailable_dates } = response.data
-        
+
         const unavailableDates = [
             ...unavailable_dates,
             ...rentalPeriod.dates
         ]
-        console.log(rentalPeriod.dates)
+
+        await api.post('/schedules_byuser', {
+            id: String(new Date().getTime()),
+            user_id: 1,
+            car,
+            startDate: rentalPeriod.startDateFormatted,
+            endDate: rentalPeriod.endDateFormatted,
+
+        });
 
         api.put(`/schedules_bycars/${car.id}`, {
             id: car.id,
             unavailable_dates: unavailableDates
         })
-            .then(response => navigation.navigate('SchedulingComplete'))
-            .catch(error => Alert.alert('Não foi possivel confirmar o agendamento.'))
+            .then(() => {
+                setLoading(false)
+                navigation.navigate('SchedulingComplete')
+            })
+            .catch(() => {
+                setLoading(false)
+                Alert.alert('Não foi possivel confirmar o agendamento.')
+            })
 
-
+       
 
     }
 
@@ -157,6 +173,7 @@ export function SchedulingDetails() {
                     title="Alugar agora"
                     color={colors.success}
                     onPress={handleConfirmRental}
+                    loading={loading}
                 />
             </Footer>
         </Container>

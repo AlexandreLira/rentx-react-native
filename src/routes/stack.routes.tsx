@@ -6,20 +6,9 @@ import { CarDetails } from '../screens/CarDetails';
 import { Scheduling } from '../screens/Scheduling';
 import { SchedulingDetails } from '../screens/SchedulingDetails';
 import { SchedulingComplete } from '../screens/SchedulingComplete';
+import { MyCars } from '../screens/MyCars';
 
 const { Navigator, Screen } = createNativeStackNavigator()
-
-const config = {
-    animation: 'timing',
-    config: {
-        stiffness: 1000,
-        damping: 500,
-        mass: 3,
-        overshootClamping: true,
-        restDisplacementThreshold: 0.01,
-        restSpeedThreshold: 0.01,
-    },
-};
 
 export function StackRoutes() {
     return (
@@ -32,6 +21,10 @@ export function StackRoutes() {
             <Screen
                 name="Home"
                 component={Home}
+            />
+            <Screen
+                name="MyCars"
+                component={MyCars}
             />
             <Screen
                 name="CarDetails"

@@ -1,9 +1,10 @@
 import React from 'react';
 import { FlatList } from 'react-native';
 import styled from 'styled-components/native';
-import { RFValue } from 'react-native-responsive-fontsize';
+import { RFValue, RFPercentage } from 'react-native-responsive-fontsize';
 
 import { CarDTO } from '../../dtos/CarDTOS';
+import { RectButton } from 'react-native-gesture-handler';
 
 export const Container = styled.View`
     flex: 1;
@@ -23,8 +24,8 @@ export const Header = styled.View`
 `
 
 export const TotalCars = styled.Text`
-    color: ${({theme}) => theme.colors.text};
-    font-family: ${({theme}) => theme.fonts.primary_400};
+    color: ${({ theme }) => theme.colors.text};
+    font-family: ${({ theme }) => theme.fonts.primary_400};
     font-size: ${RFValue(15)}px;
 `;
 
@@ -39,3 +40,18 @@ export const Separator = styled.View`
     height: 16px;
     width: 100px;
 `;
+
+export const MyCarButton = styled(RectButton)`
+    width: 60px;
+    height: 60px;
+
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+
+    bottom: ${RFPercentage(3)}px;
+    right: ${RFPercentage(3)}px;
+
+    background-color: ${({ theme }) => theme.colors.main};
+    border-radius: 30px;
+`
