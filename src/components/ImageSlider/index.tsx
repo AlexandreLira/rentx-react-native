@@ -21,8 +21,9 @@ export function ImageSlider({ imagesUrl }: Props) {
     const [imageIndex, setImageIndex] = useState(0)
 
     const indexChanged = useRef((info: ChangeImageProps) => {
-        const index = info.viewableItems[0].index
-        setImageIndex(index)
+            const index = info.viewableItems[0]?.index
+            
+            setImageIndex(index)
     })
 
 

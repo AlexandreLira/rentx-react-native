@@ -26,6 +26,8 @@ import {
 
 import { CarDTO } from '../../dtos/CarDTOS';
 import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
+import Animated, { Extrapolate, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { RefreshControl } from 'react-native-gesture-handler';
 
 interface Params {
     car: CarDTO;
@@ -36,6 +38,25 @@ export function CarDetails() {
     const route = useRoute()
     const { car } = route.params as Params
 
+    const scrollY = useSharedValue(0)
+
+    const scrollHandler = useAnimatedScrollHandler(event => {
+        scrollY.value = event.contentOffset.y
+
+    })
+
+    const headerStyleAnimation = useAnimatedStyle(() => {
+        return {
+            height: interpolate(
+                scrollY.value,
+                [0, 150],
+                [150, 40],
+                Extrapolate.CLAMP
+            ),
+            opacity: interpolate(scrollY.value, [0, 150], [1, 0])
+        }
+    })
+
     function handleConfirmRental() {
         navigation.navigate('Scheduling', { car })
     }
@@ -44,15 +65,21 @@ export function CarDetails() {
         <Container>
             <StatusBar style="dark" />
             <Header>
-                <BackButton/>
+                <BackButton />
             </Header>
 
-            <CarImageContent>
+            <CarImageContent
+
+                style={headerStyleAnimation}
+            >
                 <ImageSlider imagesUrl={car.photos} />
             </CarImageContent>
 
 
-            <Content>
+            <Content
+                onScroll={scrollHandler}
+                scrollEventThrottle={16}
+            >
                 <Details>
                     <Description>
                         <Brand>{car.brand}</Brand>
@@ -75,6 +102,11 @@ export function CarDetails() {
                     ))}
                 </Accessories>
 
+                <About>{car.about}</About>
+                <About>{car.about}</About>
+                <About>{car.about}</About>
+                <About>{car.about}</About>
+                <About>{car.about}</About>
                 <About>{car.about}</About>
             </Content>
 

@@ -61,7 +61,7 @@ export function Splash() {
     useEffect(() => {
         splashAnimation.value = withTiming(
             50,
-            { duration: 5000 },
+            { duration: 3000 },
             () => {
                 'worklet'
                 runOnJS(startApp)()
