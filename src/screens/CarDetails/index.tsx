@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 import { Accessory } from '../../components/Accessory';
 import { BackButton } from '../../components/BackButton';
@@ -24,89 +24,90 @@ import {
     Footer
 } from './styles';
 
-import gasolineSvg from '../../assets/gasoline.svg'
-import accelerationSvg from '../../assets/acceleration.svg'
-import forceSvg from '../../assets/force.svg'
-import peopleSvg from '../../assets/people.svg'
-import speedSvg from '../../assets/speed.svg'
-import exchangeSvg from '../../assets/exchange.svg'
+import { CarDTO } from '../../dtos/CarDTOS';
+import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
+import Animated, { Extrapolate, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { RefreshControl } from 'react-native-gesture-handler';
+
+interface Params {
+    car: CarDTO;
+}
 
 export function CarDetails() {
     const navigation = useNavigation<any>()
+    const route = useRoute()
+    const { car } = route.params as Params
 
-    const accessoriesItems = [
-        {
-            name: '380km/h',
-            icon: speedSvg
-        },
-        {
-            name: '3.2s',
-            icon: accelerationSvg
-        },
-        {
-            name: '800 HP',
-            icon: forceSvg
-        },
-        {
-            name: 'Gasolina',
-            icon: gasolineSvg
-        },
-        {
-            name: 'Auto',
-            icon: exchangeSvg
-        },
-        {
-            name: '2 pessoas',
-            icon: peopleSvg
-        },
-    ]
+    const scrollY = useSharedValue(0)
 
-    function handleConfirmRental(){
-        navigation.navigate('Scheduling')
+    const scrollHandler = useAnimatedScrollHandler(event => {
+        scrollY.value = event.contentOffset.y
+
+    })
+
+    const headerStyleAnimation = useAnimatedStyle(() => {
+        return {
+            height: interpolate(
+                scrollY.value,
+                [0, 150],
+                [150, 40],
+                Extrapolate.CLAMP
+            ),
+            opacity: interpolate(scrollY.value, [0, 150], [1, 0])
+        }
+    })
+
+    function handleConfirmRental() {
+        navigation.navigate('Scheduling', { car })
     }
 
     return (
         <Container>
             <StatusBar style="dark" />
             <Header>
-                <BackButton
-                    onPress={() => console.log('dajkh')}
-                />
+                <BackButton />
             </Header>
 
-            <CarImageContent>
-                <ImageSlider imagesUrl={['https://cdn.wheel-size.com/automobile/body/audi-rs5-2020-2022-1613028936.4473815.png']} />
+            <CarImageContent
+
+                style={headerStyleAnimation}
+            >
+                <ImageSlider imagesUrl={car.photos} />
             </CarImageContent>
 
 
-            <Content>
+            <Content
+                onScroll={scrollHandler}
+                scrollEventThrottle={16}
+            >
                 <Details>
                     <Description>
-                        <Brand>Lamborghini</Brand>
-                        <Name>Huracan</Name>
+                        <Brand>{car.brand}</Brand>
+                        <Name>{car.name}</Name>
                     </Description>
 
                     <Rent>
-                        <Period>Ao dia</Period>
-                        <Price>R$ 580</Price>
+                        <Period>{car.rent.period}</Period>
+                        <Price>R$ {car.rent.price}</Price>
                     </Rent>
                 </Details>
 
                 <Accessories>
-                    {accessoriesItems.map(item => (
+                    {car.accessories.map(accessory => (
                         <Accessory
-                            key={item.name}
-                            name={item.name}
-                            icon={item.icon}
+                            key={accessory.type}
+                            name={accessory.name}
+                            icon={getAccessoryIcon(accessory.type)}
                         />
                     ))}
                 </Accessories>
 
-                <About>
-                    Este é automóvel desportivo.
-                    Surgiu do lendário touro de lide indultado na praça Real Maestranza de Sevilla.
-                    É um belíssimo carro para quem gosta de acelerar.
-                </About>
+                <About>{car.about}</About>
+                <About>{car.about}</About>
+                <About>{car.about}</About>
+                <About>{car.about}</About>
+                <About>{car.about}</About>
+                <About>{car.about}</About>
             </Content>
 
             <Footer>

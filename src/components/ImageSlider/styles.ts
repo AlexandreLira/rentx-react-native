@@ -25,8 +25,7 @@ export const ImageIndex = styled.View<ImageIndexProps>`
 
 export const CarImageWrapper = styled.View`
     width: ${width}px;
-    height: 132px;
-    
+    flex: 1;
     justify-content: center;
     align-items: center;
 `;
